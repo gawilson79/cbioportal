@@ -59,6 +59,7 @@ class MetaFileTypes(object):
     GENE_PANEL_MATRIX = 'meta_gene_panel_matrix'
     GSVA_SCORES = 'meta_gsva_scores'
     GSVA_PVALUES = 'meta_gsva_pvalues'
+    PHYLOGENETIC_TREE_STRUCTURE = 'meta_phylogenetic_tree_structure'
 
 # fields allowed in each meta file type, maps to True if required
 META_FIELD_MAP = {
@@ -202,6 +203,13 @@ META_FIELD_MAP = {
         'datatype': True,
         'data_filename': True
     },
+    MetaFileTypes.PHYLOGENETIC_TREE_STRUCTURE: {
+        'cancer_study_identifier': True,
+        'genetic_alteration_type': True,
+        'datatype': True,
+        'description': True,
+        'data_filename': True
+    },
     MetaFileTypes.CASE_LIST: {
         'cancer_study_identifier': True,
         'stable_id': True,
@@ -266,7 +274,8 @@ IMPORTER_CLASSNAME_BY_META_TYPE = {
     MetaFileTypes.MUTATION_SIGNIFICANCE: "org.mskcc.cbio.portal.scripts.ImportMutSigData",
     MetaFileTypes.GENE_PANEL_MATRIX: "org.mskcc.cbio.portal.scripts.ImportGenePanelProfileMap",
     MetaFileTypes.GSVA_SCORES: "org.mskcc.cbio.portal.scripts.ImportProfileData",
-    MetaFileTypes.GSVA_PVALUES: "org.mskcc.cbio.portal.scripts.ImportProfileData"
+    MetaFileTypes.GSVA_PVALUES: "org.mskcc.cbio.portal.scripts.ImportProfileData",
+    MetaFileTypes.PHYLOGENETIC_TREE_STRUCTURE: "org.mskcc.cbio.portal.scripts.ImportTreeStructureData"
 }
 
 IMPORTER_REQUIRES_METADATA = {
@@ -276,7 +285,8 @@ IMPORTER_REQUIRES_METADATA = {
     "org.mskcc.cbio.portal.scripts.ImportMutSigData" : False,
     "org.mskcc.cbio.portal.scripts.ImportProfileData" : True,
     "org.mskcc.cbio.portal.scripts.ImportTimelineData" : True,
-    "org.mskcc.cbio.portal.scripts.ImportGenePanelProfileMap" : False
+    "org.mskcc.cbio.portal.scripts.ImportGenePanelProfileMap" : False,
+    "org.mskcc.cbio.portal.scripts.ImportTreeStructureData" : True
 }
 
 # ------------------------------------------------------------------------------
@@ -526,7 +536,8 @@ def get_meta_file_type(meta_dictionary, logger, filename):
         ("GISTIC_GENES_DEL", "Q-VALUE"): MetaFileTypes.GISTIC_GENES,
         ("MUTSIG", "Q-VALUE"): MetaFileTypes.MUTATION_SIGNIFICANCE,
         ("GENESET_SCORE", "GSVA-SCORE"): MetaFileTypes.GSVA_SCORES,
-        ("GENESET_SCORE", "P-VALUE"): MetaFileTypes.GSVA_PVALUES
+        ("GENESET_SCORE", "P-VALUE"): MetaFileTypes.GSVA_PVALUES,
+        ("PHYLOGENETIC_TREE", "PHYLOGENETIC_TREE_STRUCTURE"): MetaFileTypes.PHYLOGENETIC_TREE_STRUCTURE
     }
     result = None
     if 'genetic_alteration_type' in meta_dictionary and 'datatype' in meta_dictionary:
